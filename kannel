@@ -1,0 +1,145 @@
+#!/bin/bash
+
+BB=`which bearerbox`
+SB=`which smsbox`
+
+
+StartFlag="off"
+
+check(){
+        if [ -z $1 ]
+        then
+                echo "Invalid check() argument"
+                exit 2
+        fi
+        SBStatus=`ps auxf | grep $1 | grep smsbox | wc -l`
+        BBStatus=`ps auxf | grep $1 | grep bearerbox | wc -l`
+        CNF=`basename $1`
+        echo ;echo "--------------------------------------"
+        echo ">> $CNF current status :- "
+        echo "--------------------------------------"
+
+        # Check BB
+
+        if [ $BBStatus -eq 1 ]
+        then
+                echo "BearerBox up with pid : `ps auxf | grep $1 | grep bearerbox | awk '{print $2}'`"
+        else
+                echo "          BearerBox down !! "
+                logger "[Kannel Service] $CNF was Down"
+                if [ $StartFlag = "on" ] ; then
+                        $BB $1  2> /dev/null &
+                        echo "BearerBox should be up now  , restart the scipt to check "
+                        sleep 5
+                        $SB $1   2> /dev/null &
+                        echo "SMSBox should be up now  , restart the scipt to check "
+                fi
+        fi
+
+        # Check SMSBox
+
+        if [ $SBStatus -ge 1 ]
+        then
+                echo "SMSBox up with pid(s) : `ps auxf | grep $1 | grep smsbox | awk '{print $2}'`"
+                # Handle special case SMSBox up and BB down !!!
+                if [ $SBStatus -ge 1 ]  && [ $BBStatus -eq 0 ]
+                then
+                        echo "Strange SMSBox up and BB down !! " ; echo "Killing SMSBoxes"
+                        for pid in `ps auxf | grep $1 | grep smsbox | awk '{print $2}'` ;do kill -9 $pid ;done
+                fi
+
+        else
+                echo  "         SMSBox down !! "
+                logger "[Kannel Service] SB $CNF was Down"
+                if [ $StartFlag = "on" ]
+                then
+                        $SB $1  2> /dev/null &
+                        echo "SMSBox should be up now  , restart the scipt to check "
+                fi
+        fi
+
+        echo
+}
+
+sys_configured_kannel(){
+        for cnf in `ls $BUNDLE_ROOT/configs/*.conf`
+        do
+                check $cnf
+        done
+}
+
+
+auto_configured_kannel()
+{
+        for cnf in `cat $BUNDLE_ROOT/configs/auto-kannels.list`
+        do
+                check $cnf
+        done
+}
+
+usage(){
+        echo "Usage :"
+        echo "------ "
+        echo "          `basename $0` takes those args : (--show-all|--show-run|--check|--show-auto|--start-auto|--auto|--stop|--make-auto|--unset-auto) "
+        echo "                  --show-run and --check: Just check the status of running kannel "
+        echo "                  --show-all : Show the status of all configured kannels in the system"
+        echo "                  --auto and --start-auto : Check the status of auto start kannels and take a proper action "
+        echo "                  --stop : take the full path of the kannel you need to stop"
+        echo "                  --add /conf/file : add the conf file to system auto start sytem "
+        echo "                          like $0 --add $BUNDLE_ROOT/configs/kannel.conf"
+        echo "                  --remove /conf/file : remove conf file from system auto start"
+        echo "                  --show-auto : show the auto configured kannel "
+        echo
+        exit 2
+}
+
+
+
+
+# main()
+case $1 in
+        --show-auto)
+                cat $BUNDLE_ROOT/configs/auto-kannels.list
+        ;;
+        --add)
+                if [ -z $2 ] ; then usage ; fi
+                echo "adding $2 to the system auto checker "
+                mat=`grep -c $2 $BUNDLE_ROOT/configs/auto-kannels.list`
+                if [ $mat -ne 0 ] ; then echo -e "\n\t(!!)\n\tSeem this file already at the system auto checker"; exit 11 ; fi
+                echo $2 >> $BUNDLE_ROOT/configs/auto-kannels.list
+                sleep 1
+                echo "Done ."
+        ;;
+        --remove)
+                echo "Remove $2 to the system auto checker "
+                sed -i "s|$2||g" $BUNDLE_ROOT/configs/auto-kannels.list
+                sed -i '/^$/d'  $BUNDLE_ROOT/configs/auto-kannels.list
+                sleep 1
+                echo "Done ."
+        ;;
+        --stop)
+                echo "Stop kannel ( $2 ) @ pid `ps auxf | grep $2 | grep bearerbox | awk '{print $2}'`"
+                kill -9 `ps auxf | grep $2 | grep bearerbox | awk '{print $2}'` && sleep 6 && kill -9 `ps auxf | grep $2 | grep smsbox | awk '{print $2}'`
+                echo "done"
+        ;;
+        --[Ss]how-run|--check)
+                echo "Current running kannels "
+                /bin/ps aux | awk '/bearerbox/{ if($0 !~ "awk") print $NF } '
+        ;;
+        --[Ss]how-all)
+                sys_configured_kannel
+                ;;
+    --[Aa]uto|--start-auto)
+                StartFlag="on"
+                auto_configured_kannel
+                #cd $BUNDLE_ROOT/configs/SMSBoxes
+                #sleep 1
+                #sh run.sh
+        ;;
+        *)
+                usage
+                exit  1
+        ;;
+esac
+
+exit 0
