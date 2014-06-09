@@ -25,7 +25,7 @@ install_kannel(){
                 echo "Failed try to ./configure "
                 exit 1
         fi
-        make && make install && return 0
+        make && make install && make clean && return 0
         return 2
 }
 
@@ -53,6 +53,12 @@ return
 add_cron_jobs(){
 # tune anacron also
 return
+}
+
+uninstall(){
+        rm -rf $BUNDLE_ROOT  
+        rm -f /bin/kannel
+        
 }
 
 provision_kannel_wrapper(){
