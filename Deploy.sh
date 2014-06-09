@@ -79,6 +79,7 @@ provision_kannel_wrapper(){
         fi
         sudo git checkout kannel
         sudo cp kannel /bin/kannel
+        chmod +x $_
 
 }
 # Main
