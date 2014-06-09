@@ -25,7 +25,7 @@ install_kannel(){
                 echo "Failed try to ./configure "
                 exit 1
         fi
-        make && make install && make clean && return 0
+        sudo make && sudo make install && sudo make clean && return 0
         return 2
 }
 
