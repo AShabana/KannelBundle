@@ -35,6 +35,7 @@ return
 }
 
 deployment_automation(){
+# system start up 
 return
 }
 
@@ -52,6 +53,7 @@ return
 
 add_cron_jobs(){
 # tune anacron also
+# tune server date and time 
 return
 }
 
