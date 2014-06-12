@@ -14,7 +14,7 @@ install_kannel(){
         fi
 
         cd $BUNDLE_ROOT/src
-        sudo yum -y remove byacc 2>&1 /dev/null 
+        sudo yum -y remove byacc > /dev/null  2>&1 
         sudo yum -y install gcc glibc git libxml2-devel curl svn mysql mysql-devel mysql-server bison
         sudo svn co  https://svn.kannel.org/gateway/trunk@$kannel_revision
         cd trunk
