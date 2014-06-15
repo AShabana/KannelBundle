@@ -1,7 +1,9 @@
 #!/bin/bash
 
-BB=`which bearerbox`
-SB=`which smsbox`
+BB=`which bearerbox`   #<< init script is the responsible for setting this
+SB=`which smsbox`      #<< init script is the responsible for setting this
+BUNDLE_ROOT="/kannel"  #<< init script is the responsible for setting this
+
 
 
 StartFlag="off"
