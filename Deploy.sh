@@ -29,12 +29,16 @@ install_kannel(){
         return 2
 }
 
+add_mo_services(){
+        
+}
+
 add_smscs(){
 # add testing network and smpp
 return
 }
 
-deployment_automation(){
+system_startup_automation(){
 # system start up 
 return
 }
@@ -91,5 +95,7 @@ provision_kannel_wrapper(){
 
 }
 # Main
+
+welcome # Menua of action list
 install_kannel
 provision_kannel_wrapper
