@@ -4,16 +4,16 @@
         require_once  "Auth.php"  ;exit(11);
         }
 
-
+        $config = parse_ini_file("config.ini",true) ;
         # Search for log of the sent sms in its proper log-file
         # Get conf file
-        $cmd = "egrep -l '^admin-port[[:space:]]*=[[:space:]]*" . $_POST['port'] . "' $config["global*.conf  ";
+        $cmd = "egrep -l '^admin-port[[:space:]]*=[[:space:]]*" . $_POST['port'] . "' " . $config["global"]["kannel_config_path"] . "/*.conf  ";
         $conf_file = exec($cmd);
         # DEBUG echo $conf_file ;
         $cmd = "egrep -m1 '^sendsms-port[[:space:]]*=[[:space:]]*[[:digit:]]+' ". $conf_file." | cut -d'=' -f2" ;
         $sendsms_port = trim(exec($cmd)) ;
         # Send SMS number
-        $url = 'http://196.2.194.24:'.$sendsms_port.'/cgi-bin/sendsms?username=nemra1&password=koko88&smsc='.$_POST['smsc'].'&from=TestLink&to='.$_POST['from'].'&text=test&coding=0' ;
+        $url = 'http://localhost' .$sendsms_port.'/cgi-bin/sendsms?username=nemra1&password=koko88&smsc='.$_POST['smsc'].'&from=TestLink&to='.$_POST['from'].'&text=test&coding=0' ;
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_POST, 0);
