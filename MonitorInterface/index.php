@@ -39,7 +39,7 @@ if( empty($_SESSION['sessionid']) /*|| !isset($_COOKIE["CCS_MON_IF_COOKIE"])*/){
                         <ul>
 
                                 <strong>Bundle Addons ::</strong>
-                                <li><a href="getkannels.php">ALL Kannels: </a> Get All System running kannels</li>
+                                <li><a href="getkannels.php">Running Kannels: </a> Get snapshot of all System running kannels</li>
                         </ul>
                 </td>
                 <td class="textArea" align="right" valign="top">
