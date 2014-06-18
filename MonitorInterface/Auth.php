@@ -13,7 +13,7 @@
 			    header( 'Location:index.php');
 			    
 			}
-			elseif( $_POST["Fname"] == $config["glabal"]["admin"] &&  $config["global"]["admin_password"] == $_POST['Lname']  ) { 
+			elseif( $_POST["Fname"] == $config["global"]["admin"] &&  $config["global"]["admin_password"] == $_POST['Lname']  ) { 
 				print "Sucesss ..<br/>";
 				session_start();
 				$sid = session_id() ;
