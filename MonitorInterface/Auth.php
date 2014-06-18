@@ -4,7 +4,7 @@
 		include 'auth_form.html' ;
 		if(  isset($_POST["Fname"]) && isset($_POST["Lname"]) && $_POST["Lname"] != ""){
 			 $config = parse_ini_file("config.ini",true) ;
-			if ( function_exists("ldap_connect"){
+			if ( function_exists("ldap_connect")){
 			    $ldap = ldap_connect($config["ldap"]["host"]);
 			    ldap_bind($ldap, $_POST['Fname'], $_POST['Lname']);
 			    print "Sucesss ..<br/>";
