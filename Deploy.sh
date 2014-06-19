@@ -29,6 +29,14 @@ install_kannel(){
         return 2
 }
 
+iptables_setting(){
+return
+}
+
+kannel_proxy(){
+return
+}
+
 add_mo_services(){
         
 }
