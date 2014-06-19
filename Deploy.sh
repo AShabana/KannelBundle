@@ -38,6 +38,10 @@ add_smscs(){
 return
 }
 
+failed_submit_response_center(){
+return        
+}
+
 system_startup_automation(){
 # system start up 
 return
