@@ -29,8 +29,12 @@ install_kannel(){
         return 2
 }
 
-iptables_setting(){
-return
+
+networking_setting(){
+# iptables
+# tunniling
+# routing 
+# ipsec
 }
 
 kannel_proxy(){
@@ -77,7 +81,8 @@ return
 }
 
 configuration_management_system(){
-# i.e. wrapp git functionality         
+# i.e. wrapp git functionality 
+# it also bakcup
 }
 
 add_cron_jobs(){
