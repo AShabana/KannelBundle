@@ -55,11 +55,25 @@ add_log_rotation(){
 return
 }
 
+add_satistics_engine(){
+# This engine to all hassel of historical data
+# collector at cron job
+# data storage layer i.e. rddtools
+# data representation layer i.e. 
+# will it handle rotation or need our action
+return
+}
+
+configuration_management_system(){
+# i.e. wrapp git functionality         
+}
+
 add_cron_jobs(){
 # tune anacron also
 # tune server date and time 
 return
 }
+
 
 uninstall(){
         rm -rf $BUNDLE_ROOT  
