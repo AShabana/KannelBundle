@@ -1,3 +1,5 @@
+<< depreciated project and should be replaced with docker one recently >>
+
 KannelBundle
 ============
 
