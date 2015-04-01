@@ -1,11 +1,9 @@
 #!/bin/bash
 
-BB=`which bearerbox`   #<< init script is the responsible for setting this
-SB=`which smsbox`      #<< init script is the responsible for setting this
-BUNDLE_ROOT="/kannel"  #<< init script is the responsible for setting this
-
-
-
+BB=`which bearerbox`   #<< Init script should do this
+SB=`which smsbox`      #<< Init script should do this
+BUNDLE_ROOT="/kannel"  #<< Init script should do this
+cd "$BUNDLE_ROOT/configs"
 StartFlag="off"
 
 check(){
@@ -17,7 +15,9 @@ check(){
         SBStatus=`ps auxf | grep $1 | grep smsbox | wc -l`
         BBStatus=`ps auxf | grep $1 | grep bearerbox | wc -l`
         CNF=`basename $1`
-        echo ;echo "--------------------------------------"
+                other_boxes="${CNF:0:((${#CNF}-5))}_Boxes"
+                smsboxes="$(ls $other_boxes/*.smsbox)"
+                echo "--------------------------------------"
         echo ">> $CNF current status :- "
         echo "--------------------------------------"
 
@@ -56,11 +56,21 @@ check(){
                 if [ $StartFlag = "on" ]
                 then
                         $SB $1  2> /dev/null &
-                        echo "SMSBox should be up now  , restart the scipt to check "
+                        echo "Default SMSBox should be up now  , restart the scipt to check "
+                                                echo -n "Iterate for other SMSBoxes@ "
+                                                echo "$BUNDLE_ROOT/configs/$other_boxes"
+                                                cd $other_boxes
+                                                for sb in $smsboxes
+                                                do
+                                                        echo $sb
+                                                        $SB $sb 2> /dev/null &
+                                                done
+                                                cd -
                 fi
         fi
 
-        echo
+        echo "##Warning : Please start smsbox of pcards in MAIN Machine"
+
 }
 
 sys_configured_kannel(){
