@@ -1,8 +1,8 @@
 #!/bin/bash
 
-BB=`which bearerbox`
-SB=`which smsbox`
-BUNDLE_ROOT="/kannel"
+BB=`which bearerbox` #<<
+SB=`which smsbox`       #<<
+BUNDLE_ROOT="/kannel"   #<<
 cd "$BUNDLE_ROOT/configs"
 StartFlag="off"
 
